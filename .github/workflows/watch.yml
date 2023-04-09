@@ -1,0 +1,25 @@
+name: Collect data daily
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  audit:
+    name: Scrap data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - name: Building
+        run: yarn install --frozen-lockfile
+      - name: Scrap data
+        env:
+          MONDODB_URL: ${{ secrets.MONDODB_URL }}
+        run: node ./oryx.js

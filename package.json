@@ -1,0 +1,19 @@
+{
+  "name": "oryx-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "vitest": "^0.29.8"
+  },
+  "scripts": {
+    "dev": "vitest --watch",
+    "test": "vitest --run"
+  }
+}
