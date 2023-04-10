@@ -2,11 +2,11 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import { connect, disconnect } from "./db.js";
-import { page, parse } from "./html.js";
+import { page, parseLosesPage } from "./html.js";
 
 async function main() {
   const html = await page("https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-equipment.html");
-  const parsed = parse(html);
+  const parsed = parseLosesPage(html);
 
   console.log(parsed);
 
