@@ -3,28 +3,41 @@ import mongoose from "mongoose";
 const metricSchema = new mongoose.Schema(
   {
     date: Date,
-    category: String,
+    list: String,
     total: Number,
-    types: [
+    destroyed: Number,
+    damaged: Number,
+    abandoned: Number,
+    captured: Number,
+    categories: [
       {
-        type: String,
-        amount: Number,
+        name: String,
+        total: Number,
+        destroyed: Number,
+        damaged: Number,
+        abandoned: Number,
+        captured: Number,
+        types: [
+          {
+            name: String,
+            amount: Number,
+          },
+        ],
       },
     ],
   },
   {
     timeseries: {
       timeField: "date",
-      metaField: "category",
+      metaField: "list",
       granularity: "day",
     },
   }
 );
 
-export function diff({ previous, current }) {
-    const changes = [];
-    return changes;
-  }
+const Metric = mongoose.model("Metric", metricSchema);
 
-export const Metric = mongoose.model("Metric", metricSchema);
-
+export async function save(data) {
+  const metric = new Metric(data);
+  return metric.save();
+}

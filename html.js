@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-export async function page(url) {
+export async function fetchWebPage(url) {
   const response = await fetch(url, { method: "GET" });
   if (!response.ok) {
     throw new Error("Failed to fetch web page");
@@ -22,8 +22,8 @@ export function parseLosesPage(html) {
       .find("li")
       .each((index, liElement) => {
         const liText = $(liElement).clone().children().remove("a").end().text().trim();
-        const { type, amount } = parseSpecificType(liText);
-        types.push({ type, amount });
+        const { name, amount } = parseSpecificType(liText);
+        types.push({ name, amount });
       });
     const result = {
       ...category,
@@ -52,9 +52,9 @@ export function parseSpecificType(line) {
   if (!match) throw new Error(`failed to parse type \"${line}\"`);
 
   const amount = parseInt(match[1]);
-  const type = match[2].replace(/[\s\:]+$/, '');
+  const name = match[2].replace(/[\s\:]+$/, '');
 
-  return { type, amount };
+  return { name, amount };
 }
 
 function parseLosesTypes(loses) {
