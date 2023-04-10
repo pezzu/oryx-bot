@@ -35,7 +35,7 @@ export function parseLosesPage(html) {
 }
 
 export function parseCategoryTitle(title) {
-  const regex = /^(.+?) \((\s*\d+.+\d+\s*)\)$/i;
+  const regex = /^(.+?)\s*\((\s*\d+.+\d+\s*)\)\s*$/i;
   const match = title.match(regex);
 
   if (!match) throw new Error(`failed to parse category title ${title}`);
@@ -47,12 +47,12 @@ export function parseCategoryTitle(title) {
 }
 
 export function parseSpecificType(line) {
-  const regex = /^(\d+)\s+(.+):$/;
+  const regex = /^\s*(\d+)\s+(.+)$/;
   const match = regex.exec(line);
   if (!match) throw new Error(`failed to parse type \"${line}\"`);
 
   const amount = parseInt(match[1]);
-  const type = match[2].trim();
+  const type = match[2].replace(/[\s\:]+$/, '');
 
   return { type, amount };
 }

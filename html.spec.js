@@ -79,7 +79,7 @@ describe("Category title parser", () => {
     });
   });
 
-  it.skip("should handle spaces in the category title correctly", () => {
+  it("should handle spaces in the category title correctly", () => {
     expect(
       parseCategoryTitle(
         "Mine-Resistant Ambush Protected( 44, of which destroyed: 30, damaged: 4, abandoned: 1, captured: 9)"
@@ -92,6 +92,32 @@ describe("Category title parser", () => {
       abandoned: 1,
       captured: 9,
     });
+
+    expect(
+      parseCategoryTitle(
+        " Mine-Resistant Ambush Protected ( 44, of which destroyed: 30, damaged: 4, abandoned: 1, captured: 9)"
+      )
+    ).toEqual({
+      name: "Mine-Resistant Ambush Protected",
+      total: 44,
+      destroyed: 30,
+      damaged: 4,
+      abandoned: 1,
+      captured: 9,
+    });
+
+    expect(
+        parseCategoryTitle(
+          "Mine-Resistant Ambush Protected (44, of which destroyed: 30, damaged: 4, abandoned: 1, captured: 9 ) "
+        )
+      ).toEqual({
+        name: "Mine-Resistant Ambush Protected",
+        total: 44,
+        destroyed: 30,
+        damaged: 4,
+        abandoned: 1,
+        captured: 9,
+      });
   });
 
   it("should return 0 if certain lose type is absent is the title", () => {
@@ -130,7 +156,14 @@ describe("Category subtypes parser", () => {
     expect(parseSpecificType("4 BPM-97 Vystrel:")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
   });
 
-  it.skip("should parse the category subtypes without colon at the end", () => {
+  it("should parse the category subtypes without colon at the end", () => {
     expect(parseSpecificType("4 BPM-97 Vystrel")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
+  });
+
+  it("should trim spaces in the type name", () => {
+    expect(parseSpecificType("4 BPM-97 Vystrel: ")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
+    expect(parseSpecificType("4 BPM-97 Vystrel : ")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
+    expect(parseSpecificType("4 BPM-97 Vystrel :")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
+    expect(parseSpecificType(" 4 BPM-97 Vystrel:")).toEqual({ type: "BPM-97 Vystrel", amount: 4 });
   });
 });
