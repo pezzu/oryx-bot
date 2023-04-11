@@ -133,6 +133,33 @@ describe("HTML parser for Oryxshop", () => {
       ],
     });
   });
+
+  it("should handle span elements in the list title correctly", async () => {
+    const html = await readFile("./test-data/span-in-list-title.html", "utf-8");
+    expect(parseLosesPage(html)).toEqual({
+      list: "Ukraine",
+      total: 3135,
+      destroyed: 2025,
+      damaged: 175,
+      abandoned: 89,
+      captured: 864,
+      categories: [
+        {
+          name: "Tanks",
+          total: 479,
+          destroyed: 292,
+          damaged: 28,
+          abandoned: 19,
+          captured: 140,
+          types: [
+            { name: "T-64A", amount: 2 },
+            { name: "T-64B", amount: 2 },
+            { name: "T-64BVK", amount: 1 },
+          ],
+        },
+      ],
+    });
+  });
 });
 
 describe("Category title parser", () => {
