@@ -12,7 +12,7 @@ export async function fetchWebPage(url) {
 export function parseLosesPage(html) {
   const $ = cheerio.load(html);
   const categories = [];
-  const title = $("p + h3 + p").prev("h3").text().trim();
+  const title = $('p + h3 span[style="color: red;"]').text().trim();
   const [list, loses] = title.split(" - ");
   const { total, destroyed, damaged, abandoned, captured } = parseLosesTypes(loses);
   $("h3 + ul").each((index, ulElement) => {
@@ -52,7 +52,7 @@ export function parseSpecificType(line) {
   if (!match) throw new Error(`failed to parse type \"${line}\"`);
 
   const amount = parseInt(match[1]);
-  const name = match[2].replace(/[\s\:]+$/, '');
+  const name = match[2].replaceAll(String.fromCharCode(0xa0), ' ').replace(/[\s\:]+$/, '');
 
   return { name, amount };
 }

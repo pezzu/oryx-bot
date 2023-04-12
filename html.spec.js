@@ -138,7 +138,7 @@ describe("HTML parser for Oryxshop", () => {
     const html = await readFile("./test-data/span-in-list-title.html", "utf-8");
     expect(parseLosesPage(html)).toEqual({
       list: "Ukraine",
-      total: 3135,
+      total: 3153,
       destroyed: 2025,
       damaged: 175,
       abandoned: 89,
