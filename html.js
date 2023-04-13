@@ -21,7 +21,7 @@ export function parseLosesPage(html) {
     $(ulElement)
       .find("li")
       .each((index, liElement) => {
-        const liText = $(liElement).clone().children().remove("a").end().text().trim();
+        const liText = $(liElement).clone().find("a").remove().end().text().trim();
         const { name, amount } = parseSpecificType(liText);
         types.push({ name, amount });
       });
@@ -52,7 +52,7 @@ export function parseSpecificType(line) {
   if (!match) throw new Error(`failed to parse type \"${line}\"`);
 
   const amount = parseInt(match[1]);
-  const name = match[2].replaceAll(String.fromCharCode(0xa0), ' ').replace(/[\s\:]+$/, '');
+  const name = match[2].replaceAll(String.fromCharCode(0xa0), " ").replace(/[\s\:]+$/, "");
 
   return { name, amount };
 }
