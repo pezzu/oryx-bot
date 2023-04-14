@@ -1,25 +1,32 @@
 import mongoose from "mongoose";
 
-const metricSchema = new mongoose.Schema(
+const lossesSchema = new mongoose.Schema(
   {
-    date: Date,
+    timestamp: Date,
     list: String,
-    total: Number,
-    destroyed: Number,
-    damaged: Number,
-    abandoned: Number,
-    captured: Number,
-    categories: [
+    losses: {
+      total: Number,
+      destroyed: Number,
+      damaged: Number,
+      abandoned: Number,
+      captured: Number,
+    },
+    types: [
       {
-        name: String,
-        total: Number,
-        destroyed: Number,
-        damaged: Number,
-        abandoned: Number,
-        captured: Number,
-        types: [
+        type: {
+          type: String,
+          required: true,
+        },
+        losses: {
+          total: Number,
+          destroyed: Number,
+          damaged: Number,
+          abandoned: Number,
+          captured: Number,
+        },
+        models: [
           {
-            name: String,
+            model: String,
             amount: Number,
           },
         ],
@@ -28,16 +35,16 @@ const metricSchema = new mongoose.Schema(
   },
   {
     timeseries: {
-      timeField: "date",
+      timeField: "timestamp",
       metaField: "list",
-      granularity: "day",
+      granularity: "hours",
     },
   }
 );
 
-const Metric = mongoose.model("Metric", metricSchema);
+const Losses = mongoose.model("Losses", lossesSchema);
 
 export async function save(data) {
-  const metric = new Metric(data);
-  return metric.save();
+  const losses = new Losses(data);
+  return losses.save();
 }

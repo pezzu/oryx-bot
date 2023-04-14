@@ -11,53 +11,54 @@ export async function fetchWebPage(url) {
 
 export function parseLosesPage(html) {
   const $ = cheerio.load(html);
-  const categories = [];
+  const types = [];
   const title = $('p + h3 span[style="color: red;"]').text().trim();
-  const [list, loses] = title.split(" - ");
-  const { total, destroyed, damaged, abandoned, captured } = parseLosesTypes(loses);
+  const [list, lossesLine] = title.split(" - ");
+  const totalLosses = parseLossesTypes(lossesLine);
   $("h3 + ul").each((index, ulElement) => {
-    const category = parseCategoryTitle($(ulElement).prev("h3").text().trim());
-    const types = [];
+    const {type, losses: typeLosses } = parseTypeTitle($(ulElement).prev("h3").text().trim());
+    const models = [];
     $(ulElement)
       .find("li")
       .each((index, liElement) => {
         const liText = $(liElement).clone().find("a").remove().end().text().trim();
-        const { name, amount } = parseSpecificType(liText);
-        types.push({ name, amount });
+        const { model, amount } = parseModel(liText);
+        models.push({ model, amount });
       });
     const result = {
-      ...category,
-      types,
+      type,
+      losses: typeLosses,
+      models,
     };
-    categories.push(result);
+    types.push(result);
   });
-  return { list, total, destroyed, damaged, abandoned, captured, categories };
+  return { list, losses: totalLosses, types };
 }
 
-export function parseCategoryTitle(title) {
+export function parseTypeTitle(title) {
   const regex = /^(.+?)\s*\((\s*\d+.+\d+\s*)\)\s*$/i;
   const match = title.match(regex);
 
   if (!match) throw new Error(`failed to parse category title ${title}`);
 
-  const name = match[1].trim();
-  const { total, destroyed, damaged, abandoned, captured } = parseLosesTypes(match[2]);
+  const type = match[1].trim();
+  const losses = parseLossesTypes(match[2]);
 
-  return { name, total, destroyed, damaged, abandoned, captured };
+  return { type, losses };
 }
 
-export function parseSpecificType(line) {
+export function parseModel(line) {
   const regex = /^\s*(\d+)\s+(.+)$/;
   const match = regex.exec(line);
   if (!match) throw new Error(`failed to parse type \"${line}\"`);
 
   const amount = parseInt(match[1]);
-  const name = match[2].replaceAll(String.fromCharCode(0xa0), " ").replace(/[\s\:]+$/, "");
+  const model = match[2].replaceAll(String.fromCharCode(0xa0), " ").replace(/[\s\:]+$/, "");
 
-  return { name, amount };
+  return { model, amount };
 }
 
-function parseLosesTypes(loses) {
+function parseLossesTypes(loses) {
   return {
     total: parseInt(loses.split(",")[0].trim()) || 0,
     destroyed: extractField(loses, "destroyed") || 0,
