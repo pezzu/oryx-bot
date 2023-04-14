@@ -6,7 +6,7 @@ import { fetchWebPage, parseLosesPage } from "./html.js";
 import { save } from "./model.js";
 
 async function main() {
-  const html = await fetchWebPage("https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-ukrainian.html");
+  const html = await fetchWebPage(process.argv[2]);
   const parsed = parseLosesPage(html);
 
 //   console.log(JSON.stringify(parsed, null, 2));

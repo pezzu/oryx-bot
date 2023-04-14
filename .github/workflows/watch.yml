@@ -18,4 +18,6 @@ jobs:
       - name: Scrap data
         env:
           MONGODB_URL: ${{ secrets.MONGODB_URL }}
-        run: node ./oryx.js
+        run: |
+          node ./oryx.js https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-equipment.html
+          node ./oryx.js https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-ukrainian.html
