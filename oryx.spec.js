@@ -1,11 +1,11 @@
 import { expect, it, describe } from "vitest";
 import { readFile } from "fs/promises";
-import { parseLosesPage, parseTypeTitle, parseModel } from "./html.js";
+import { parseLossesPage, parseTypeTitle, parseModel } from "./oryx.js";
 
-describe("HTML parser for Oryxshop", () => {
-  it("should parse the HTML", async () => {
+describe("HTML parser for Oryx/Losses pages", () => {
+  it("should parse the HTML of losses page", async () => {
     const html = await readFile("./test-data/Oryx.htm", "utf-8");
-    expect(parseLosesPage(html)).toEqual({
+    expect(parseLossesPage(html)).toEqual({
       list: "Russia",
       losses: {
         total: 10005,
@@ -55,7 +55,7 @@ describe("HTML parser for Oryxshop", () => {
 
   it("should treat nested span elements in the specific type correctly", async () => {
     const html = await readFile("./test-data/span-in-links-list.html", "utf-8");
-    expect(parseLosesPage(html)).toEqual({
+    expect(parseLossesPage(html)).toEqual({
       list: "Russia",
       losses: {
         total: 10018,
@@ -91,7 +91,7 @@ describe("HTML parser for Oryxshop", () => {
 
   it("should handle nbsp in the type name correctly", async () => {
     const html = await readFile("./test-data/nbsp-in-type-name.html", "utf-8");
-    expect(parseLosesPage(html)).toEqual({
+    expect(parseLossesPage(html)).toEqual({
       list: "Russia",
       losses: {
         total: 10018,
@@ -122,7 +122,7 @@ describe("HTML parser for Oryxshop", () => {
 
   it("should handle span elements in the type name correctly", async () => {
     const html = await readFile("./test-data/span-in-type-name.html", "utf-8");
-    expect(parseLosesPage(html)).toEqual({
+    expect(parseLossesPage(html)).toEqual({
       list: "Russia",
       losses: {
         total: 10018,
@@ -154,7 +154,7 @@ describe("HTML parser for Oryxshop", () => {
 
   it("should handle span elements in the list title correctly", async () => {
     const html = await readFile("./test-data/span-in-list-title.html", "utf-8");
-    expect(parseLosesPage(html)).toEqual({
+    expect(parseLossesPage(html)).toEqual({
       list: "Ukraine",
       losses: {
         total: 3153,
